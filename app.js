@@ -6,7 +6,7 @@ requirejs(['express'], function (express) {
 
   var app     = express(),
       //server  = app.listen(process.env.PORT || config.port),
-      server  = app.listen(3000),
+      server  = app.listen(3003),
       io      = require('socket.io').listen(server);
 
   // all environments
