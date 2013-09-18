@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat</title>
+  <link rel="stylesheet" href="/components/bootstrap/dist/css/bootstrap.min.css">
+  <style type="text/css">
+    html, body {
+      height: 100%;
+    }
+    #wrap {
+      min-height: 100%;
+      height: auto !important;
+      height: 100%;
+      margin: 0 auto -40px;
+      padding-bottom: 80px;
+    }
+    #footer {
+      overflow: hidden;
+      margin-top: -40px;
+      padding: 10px 20px;
+      background: #eee;
+    }
+    @media (min-width: 768px) {
+      .container {
+        max-width: 730px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="wrap">
+    <div class="container">
+      <div class="col-md-12">
+        <div class="page-header">
+          <h1>Comunidad</h1>
+        </div>
+        <div id="online" class="label label-primary pull-right"></div>
+        <h2 class="lead">Servicios Escolares</h2>
+        <div id="chat" class="well"></div>
+        <form id="form" role="form">
+          <div class="input-group">
+            <input type="text" class="form-control input-lg" id="message" placeholder="Mensaje">
+            <span class="input-group-btn">
+              <button type="sumbit" class="btn btn-lg btn-success">Enviar</button>
+            </span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div id="footer">
+    <div class="container">
+      <div class="col-md-12">Facultad de Filosofía y Letras</div>
+    </div>
+  </div>
+  <script type="text/javascript" src="/components/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/components/socket.io-client/dist/socket.io.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function () {
+      var socket = io.connect('http://localhost:3000');
+
+      var messages = [],
+          content = $("#chat"),
+          online = $('#online');
+
+      socket.on('connected', function (data) {
+        if (data.users > 1) {
+          online.html(data.users + ' usuarios conectados');
+        } else {
+          online.html(data.users + ' usuario conectado');
+        }
+      });
+   
+      socket.on('message', function (data) {
+        if(data.message) {
+          var p = $('<p></p>');
+          
+          if (data.date) {
+            p.append("<small class='text-muted'>" + data.date + "</small> ");
+          }
+
+          p.append(data.message);
+          content.append(p);
+        }
+      });
+   
+      $(document).delegate('#form', 'submit', function (e) {
+        e.preventDefault();
+
+        var message = $(e.currentTarget).find('#message').val();
+        socket.emit('send', { message: message });
+
+      });
+    });
+  </script>
+</body>
+</html>

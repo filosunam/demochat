@@ -1,0 +1,15 @@
+{
+  "name": "chatfilos",
+  "version": "0.0.0",
+  "authors": [
+    "Marco Godínez <markotom@gmail.com>"
+  ],
+  "description": "Chat Filos",
+  "main": "public/js/main.js",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "bootstrap": "~3.0.0",
+    "socket.io-client": "~0.9.16"
+  }
+}
